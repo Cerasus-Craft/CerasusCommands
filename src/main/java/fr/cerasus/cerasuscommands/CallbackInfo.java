@@ -24,4 +24,9 @@ public class CallbackInfo {
         this.label = label;
         this.args = args;
     }
+
+    public String getArg(int index) {
+        if (args.length <= index) return null;
+        return args[index];
+    }
 }

@@ -4,8 +4,6 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
-import org.bukkit.command.defaults.GameModeCommand;
-import org.bukkit.command.defaults.WeatherCommand;
 import org.bukkit.util.StringUtil;
 
 import java.util.ArrayList;
