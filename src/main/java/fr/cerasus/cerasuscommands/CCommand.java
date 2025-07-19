@@ -4,7 +4,11 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
+import org.bukkit.command.defaults.GameModeCommand;
+import org.bukkit.command.defaults.WeatherCommand;
+import org.bukkit.util.StringUtil;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
@@ -34,8 +38,9 @@ public interface CCommand<T extends Enum<T> & SubCommandEnum> extends CommandExe
         return true;
     }
 
-    default List<String> onTabComplete(CommandSender commandSender, Command command, String s, String[] strings) {
-        return Arrays.asList(values()).stream().map(obj -> obj.toString().toLowerCase(Locale.ROOT)).collect(Collectors.toList());
+    default List<String> onTabComplete(CommandSender commandSender, Command command, String label, String[] args) {
+        List<String> subCommands = Arrays.asList(values()).stream().map(obj -> obj.toString().toLowerCase(Locale.ROOT)).collect(Collectors.toList());
+        return (List<String>) (args.length == 1 ? (List) StringUtil.copyPartialMatches(args[0], subCommands, new ArrayList(subCommands.size())) : new ArrayList<>());
     }
 
     default T[] values() {
