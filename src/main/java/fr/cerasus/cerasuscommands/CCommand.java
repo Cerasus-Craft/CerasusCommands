@@ -15,7 +15,7 @@ public interface CCommand<T extends Enum<T> & SubCommandEnum> extends CommandExe
 
     @Override
     default boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-        CallbackInfo ci = new CallbackInfo(sender, command, label, args);
+        CallbackInfo ci = new CallbackInfo(sender, command, label, Arrays.copyOfRange(args, 1, args.length));
         if (args.length == 0) return emptyCallback(ci);
 
         String subCommandName = args[0];
