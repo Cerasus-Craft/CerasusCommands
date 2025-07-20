@@ -17,9 +17,11 @@ public interface CCommand<T extends Enum<T> & SubCommandEnum> extends CommandExe
 
     @Override
     default boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-        CallbackInfo ci = new CallbackInfo(sender, command, label, Arrays.copyOfRange(args, 1, args.length));
+        CallbackInfo ci = new CallbackInfo(sender, command, label, args);
         if (args.length == 0) return emptyCallback(ci);
 
+        // There is a subcommand, so we remove it
+        ci.args = Arrays.copyOfRange(args, 1, args.length);
         String subCommandName = args[0];
 
         for (T t : values()) {
@@ -37,7 +39,7 @@ public interface CCommand<T extends Enum<T> & SubCommandEnum> extends CommandExe
     }
 
     default List<String> onTabComplete(CommandSender commandSender, Command command, String label, String[] args) {
-        List<String> subCommands = Arrays.asList(values()).stream().map(obj -> obj.toString().toLowerCase(Locale.ROOT)).collect(Collectors.toList());
+        List<String> subCommands = Arrays.stream(values()).map(obj -> obj.toString().toLowerCase(Locale.ROOT)).collect(Collectors.toList());
         return (List<String>) (args.length == 1 ? (List) StringUtil.copyPartialMatches(args[0], subCommands, new ArrayList(subCommands.size())) : new ArrayList<>());
     }
 
