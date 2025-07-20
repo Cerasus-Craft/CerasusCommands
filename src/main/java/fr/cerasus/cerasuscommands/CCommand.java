@@ -1,5 +1,6 @@
 package fr.cerasus.cerasuscommands;
 
+import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -34,12 +35,20 @@ public interface CCommand<T extends Enum<T> & SubCommandEnum> extends CommandExe
     }
 
     default boolean emptyCallback(CallbackInfo ci) {
+        ci.sender.sendMessage(String.format("%sUsage: %s", ChatColor.RED, String.join(", ", getSubCommands())));
         return true;
     }
-    default boolean unknownCallback(CallbackInfo ci) { return true; }
+    default boolean unknownCallback(CallbackInfo ci) {
+        ci.sender.sendMessage(String.format("%sUsage: %s", ChatColor.RED, String.join(", ", getSubCommands())));
+        return true;
+    }
+
+    default List<String> getSubCommands() {
+        return Arrays.stream(values()).map(obj -> obj.toString().toLowerCase(Locale.ROOT)).collect(Collectors.toList());
+    }
 
     default List<String> onTabComplete(CommandSender commandSender, Command command, String label, String[] args) {
-        List<String> subCommands = Arrays.stream(values()).map(obj -> obj.toString().toLowerCase(Locale.ROOT)).collect(Collectors.toList());
+        List<String> subCommands = getSubCommands();
         return (List<String>) (args.length == 1 ? (List) StringUtil.copyPartialMatches(args[0], subCommands, new ArrayList(subCommands.size())) : new ArrayList<>());
     }
 
