@@ -1,5 +1,6 @@
 package fr.cerasus.cerasuscommands;
 
+import jdk.nashorn.internal.ir.CallNode;
 import org.bukkit.World;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -28,5 +29,18 @@ public class CallbackInfo {
     public String getArg(int index) {
         if (args.length <= index) return null;
         return args[index];
+    }
+
+    public Integer getIntArg(int index) {
+        if (args.length <= index) return 0;
+
+        Integer value;
+        try {
+            value = Integer.parseInt(args[index]);
+        } catch (NumberFormatException e) {
+            value = 0;
+        }
+
+        return value;
     }
 }
